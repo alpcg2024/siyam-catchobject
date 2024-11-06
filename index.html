@@ -4,10 +4,41 @@
     <meta charset="UTF-8">
     <title>Catch the Falling Objects</title>
     <style>
-        body { display: flex; justify-content: center; align-items: center; height: 100vh; background: #f0f0f0; flex-direction: column; }
-        canvas { border: 1px solid #000; }
-        #startScreen, #gameOverScreen { display: none; text-align: center; }
-        button { padding: 10px 20px; font-size: 16px; cursor: pointer; }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(45deg, #1b2a49, #3a3d71, #4a6d88);
+            flex-direction: column;
+            color: white;
+            font-family: 'Arial', sans-serif;
+        }
+        canvas {
+            border: 5px solid #fff;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+        }
+        #startScreen, #gameOverScreen {
+            display: none;
+            text-align: center;
+            z-index: 2;
+        }
+        h1, p {
+            color: #fff;
+        }
+        button {
+            padding: 15px 30px;
+            font-size: 18px;
+            cursor: pointer;
+            background: #00f7b2; /* Neon green */
+            border: none;
+            border-radius: 5px;
+            color: #333;
+            transition: background 0.3s ease;
+        }
+        button:hover {
+            background: #00cc99; /* Slightly darker neon green */
+        }
     </style>
 </head>
 <body>
@@ -56,12 +87,13 @@
 
         function createObject() {
             const x = Math.random() * (canvas.width - 20);
-            objects.push({ x: x, y: 0, width: 20, height: 20 });
+            const color = `hsl(${Math.random() * 360}, 100%, 50%)`; // Random neon color
+            objects.push({ x: x, y: 0, width: 20, height: 20, color: color });
         }
 
         function drawObjects() {
             objects.forEach((obj) => {
-                ctx.fillStyle = "red";
+                ctx.fillStyle = obj.color;
                 ctx.fillRect(obj.x, obj.y, obj.width, obj.height);
                 obj.y += 2;
 
@@ -92,17 +124,19 @@
         }
 
         function drawPlayer() {
-            ctx.fillStyle = "blue";
+            ctx.fillStyle = "#ff00ff"; // Electric purple for the player
             ctx.fillRect(player.x, player.y, player.width, player.height);
         }
 
         function drawLives() {
-            ctx.fillStyle = "black";
+            ctx.fillStyle = "#fff";
+            ctx.font = "18px Arial";
             ctx.fillText(`Lives: ${lives}`, 10, 40);
         }
 
         function drawScore() {
-            ctx.fillStyle = "black";
+            ctx.fillStyle = "#fff";
+            ctx.font = "18px Arial";
             ctx.fillText(`Score: ${score}`, 10, 20);
         }
 
@@ -130,6 +164,15 @@
 
         function update() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Gradient background for the canvas with a darker, cooler vibe
+            const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+            gradient.addColorStop(0, "#1b2a49");
+            gradient.addColorStop(0.5, "#3a3d71");
+            gradient.addColorStop(1, "#4a6d88");
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
             drawPlayer();
             drawObjects();
             drawScore();
